@@ -41,6 +41,11 @@ exist in `config.py` (only `database_url` does). Every request therefore raised,
 `except`, and silently returned the **hard-coded mock values** further down the file.
 The API never talked to Postgres at all.
 
+Even with the URL fixed, the container still could not open a connection: SQLAlchemy's
+async engine needs `greenlet`, which `requirements.txt` did not install. The error was again
+swallowed by the same `except`, so the dashboard kept showing mock values (and period
+queries returned 500). Fixed by depending on `sqlalchemy[asyncio]`.
+
 Also wrong in that file: `poolclass=QueuePool` is incompatible with an async engine,
 `get_session` was `async def` but used as `async with`, and a fresh `DatabasePool()` —
 a new engine — was constructed on every single request.
