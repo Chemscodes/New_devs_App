@@ -18,6 +18,7 @@ pytz
 redis>=5.0.0
 requests
 sendgrid
+# [asyncio] pulls in greenlet: without it the async engine cannot connect and the API served mock data
 sqlalchemy[asyncio]>=2.0.0
 supabase
 tenacity>=8.0.0
